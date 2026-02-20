@@ -29,8 +29,12 @@ function getIngredients() {
   // 2. Wait 2 seconds using wait()
   // 3. Resolve with "Ingredients ready"
 
+  showMessage("Gathering ingredients...\n");
+
   return new Promise((resolve, reject) => {
-    // Your code here
+    wait(2000).then(() => {
+      resolve(showMessage("Ingredients ready"));
+    });
   });
 }
 
@@ -41,9 +45,20 @@ function blendSmoothie() {
   // 2. Wait 3 seconds
   // 3. Sometimes FAIL (see assignment instructions)
   // 4. Otherwise resolve with "Smoothie blended"
+showMessage("Blending smoothie...\n");
 
   return new Promise((resolve, reject) => {
-    // Your code here
+    chance = Math.floor(Math.random() * 3);
+    wait(3000).then(() => {
+      //showMessage('Change result '+chance)
+
+      if(chance == 0){
+        reject(showMessage("ERROR: Blender broke!"))
+      }
+      else{
+      resolve(showMessage("Smoothie blended"));
+      }
+    });
   });
 }
 
@@ -54,8 +69,12 @@ function pourSmoothie() {
   // 2. Wait 1 second
   // 3. Resolve with "Smoothie is ready!"
 
+  showMessage("Pouring into cup...");
+
   return new Promise((resolve, reject) => {
-    // Your code here
+    wait(1000).then(() => {
+      resolve(showMessage("Smoothie is ready!"));
+    });
   });
 }
 
@@ -67,11 +86,7 @@ function makeSmoothieWithPromises() {
   outputDiv.innerHTML = ""; // Clear previous messages
 
   // TODO: Chain the steps in order using .then()
-  // getIngredients()
-  //   .then(...)
-  //   .then(...)
-  //   .then(...)
-  //   .catch(...)
+   getIngredients().then(blendSmoothie).then(pourSmoothie).catch();
 }
 
 /* =========================
@@ -83,9 +98,16 @@ async function makeSmoothieAsync() {
 
   // TODO:
   // Use try/catch
-  // await getIngredients()
-  // await blendSmoothie()
-  // await pourSmoothie()
+  try{
+    await getIngredients()
+    await blendSmoothie()
+    await pourSmoothie()
+  }
   // Show final success message
   // Catch and display any errors
+  catch (error){
+    
+  }
 }
+
+button.addEventListener("click", makeSmoothieAsync);
